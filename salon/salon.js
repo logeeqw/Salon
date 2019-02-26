@@ -10,10 +10,8 @@ const PROMPT = require(`readline-sync`);
 const IO = require('fs');
 
 let continueResponse;
-let numCustomers, menuChoice , counter = 1, price = 0;
-let customers = [], customerBonus = [];
-// let newCustomers = customers.length;
-const CUT_PRICE = 45, STYLE_PRICE = 35, DYE_PRICE = 50, ALL_PRICE = 100;
+let customers = [], totalPrice;
+totalPrice = 0;
 
 /**
  * @method
@@ -27,21 +25,7 @@ function main() {
     }
     while (continueResponse === 1) {
         modifyCustomers();
-        /*switch (customers[newCustomers][2]) {
-            case 1: price += CUT_PRICE;
-                console.log(`${price}`);
-                break;
-            case 2: price += STYLE_PRICE;
-                console.log(`${price}`);
-                break;
-            case 3: price += DYE_PRICE;
-                console.log(`${price}`);
-                break;
-            case 4: price += ALL_PRICE;
-                console.log(`${price}`);
-                break;
-            default: console.log(`! ERROR !`);
-        }*/
+        rewardCustomers();
         setContinueResponse();
     }
     writeCustomers();
@@ -72,8 +56,8 @@ function setContinueResponse() {
  * @returns null
  */
 function modifyCustomers() {
-    // let /*counter = 1,*/ price = 0;
-    // const CUT_PRICE = 45, STYLE_PRICE = 35, DYE_PRICE = 50, ALL_PRICE = 100;
+    let counter = 1, price = 0;
+    const CUT_PRICE = 45, STYLE_PRICE = 35, DYE_PRICE = 50, ALL_PRICE = 100;
     let newCustomers = customers.length;
     customers[newCustomers] = [];
     while (!customers[newCustomers][0] || !/^[a-zA-Z -]{1,30}$/.test(customers[newCustomers][0])) {
@@ -94,17 +78,24 @@ function modifyCustomers() {
     while (price === 0){
         switch (customers[newCustomers][2]) {
             case 1: price += CUT_PRICE;
-            console.log(`wack`);
-                console.log(`${price}`);
+                console.log(`\n${price}`);
+                totalPrice += price;
+                customers[newCustomers][3] = Number(PROMPT.question(`Total price: `));
                 break;
             case 2: price += STYLE_PRICE;
-                console.log(`${price}`);
+                console.log(`\n${price}`);
+                totalPrice += price;
+                customers[newCustomers][3] = Number(PROMPT.question(`Total price: `));
                 break;
             case 3: price += DYE_PRICE;
-                console.log(`${price}`);
+                console.log(`\n${price}`);
+                totalPrice += price;
+                customers[newCustomers][3] = Number(PROMPT.question(`Total price: `));
                 break;
             case 4: price += ALL_PRICE;
-                console.log(`${price}`);
+                console.log(`\n${price}`);
+                totalPrice += price;
+                customers[newCustomers][3] = Number(PROMPT.question(`Total price: `));
                 break;
             default: console.log(`! ERROR !`);
                 break;
@@ -115,14 +106,24 @@ function modifyCustomers() {
 
 /**
  * @method
+ * @desc rewards the customer every time $750 is spent.
+ */
+function rewardCustomers() {
+    if (totalPrice >= 750){
+        console.log(`Congratulations \nAn excess amount of money has been spent \nThis coupon gives you one free haircut`)
+    }
+}
+
+/**
+ * @method
  * @desc puts customer array into I/O
  * @returns {null}
  */
 function loadCustomers() {
     let customersFile = IO.readFileSync(`data/salon-data.csv`, 'utf8');
-    let lines = customersFile.toString().split(/\r?\n/); // Automatically creates SD array on newlines
+    let lines = customersFile.toString().split(/\r?\n/);
     for (let i = 0; i < lines.length; i++) {
-        customers.push(lines[i].toString().split(/,/)); // Makes students array MD by pushing data between commas in
+        customers.push(lines[i].toString().split(/,/));
     }
 }
 
