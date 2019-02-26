@@ -91,7 +91,7 @@ function modifyCustomers() {
     while (!customers[newCustomers][2] || !/^[1-4]$/.test(customers[newCustomers][2])) {
         customers[newCustomers][2] = Number(PROMPT.question(`What would you like? \n1) Cut \n2) Style \n3) Dye \n4) All   `));
     }
-    /*while (!customers[newCustomers][3] || customers[newCustomers][3] < STYLE_PRICE && customers[newCustomers][3] > ALL_PRICE){
+    while (price === 0){
         switch (customers[newCustomers][2]) {
             case 1: price += CUT_PRICE;
             console.log(`wack`);
@@ -109,7 +109,7 @@ function modifyCustomers() {
             default: console.log(`! ERROR !`);
                 break;
         }
-    }*/
+    }
     counter++;
 }
 
